@@ -17,7 +17,7 @@ Keep local work lightweight. The authoritative test and build matrix runs in Git
 
 - Ubuntu: dependency installation, TypeScript checking, Vitest, and frontend build.
 - macOS 13, macOS 14, and Windows: Rust formatting, Clippy, tests, and checks.
-- Manual or version-tag build workflow: unsigned macOS x64/arm64 and Windows NSIS previews.
+- Manual or version-tag build workflow: unsigned portable ZIP previews for macOS x64/arm64 and Windows x64; no installers are produced.
 
 Pull requests should add or update small deterministic tests for changed behavior. Avoid snapshots for unstable UI output and avoid network-dependent tests.
 

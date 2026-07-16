@@ -6,6 +6,14 @@ A friendly, open-source desktop workshop for visually customizing Codex. Pick a 
 
 [中文说明](README.zh-CN.md)
 
+## Sponsor
+
+Thanks to [TokenToken](https://1token-store.com) for sponsoring this project — full-power models with one-click Codex access.
+
+## Portable downloads
+
+Official previews are distributed only as portable ZIP archives for macOS arm64, macOS x64, and Windows x64. Extract the complete archive and always launch it through the included `启动 Codex Skin Workshop.command` or `启动 Codex Skin Workshop.cmd`. No installer or administrator access is required.
+
 ## Highlights
 
 - **Beginner-friendly flow** — detect Codex, choose an image, tune the look, preview, apply.
@@ -27,7 +35,7 @@ A friendly, open-source desktop workshop for visually customizing Codex. Pick a 
 
 Prerequisites: a current Node.js/npm toolchain and the Rust/Tauri platform prerequisites for your operating system.
 
-Development checks, tests, and desktop bundles are intentionally validated by GitHub Actions. Fork the repository, push a branch, and use the **Check** and **Build desktop previews** workflows. This keeps heavy multi-platform builds off lightweight local machines.
+Development checks, tests, and portable desktop archives are intentionally validated by GitHub Actions. Fork the repository, push a branch, and use the **Check** and **Build portable previews** workflows. This keeps heavy multi-platform builds off lightweight local machines.
 
 ## Frontend/backend contract
 

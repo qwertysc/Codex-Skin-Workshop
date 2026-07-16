@@ -6,6 +6,14 @@
 
 [English](README.md)
 
+## 赞助商
+
+感谢 [TokenToken](https://1token-store.com) 赞助本项目——满血模型，一键接入 Codex。
+
+## 便携版下载
+
+项目只提供 macOS arm64、macOS x64 和 Windows x64 便携 ZIP。请完整解压，并始终通过包内的 `启动 Codex Skin Workshop.command` 或 `启动 Codex Skin Workshop.cmd` 进入；无需安装，也不需要管理员权限。
+
 ## 主要特点
 
 - **小白友好的步骤**：检测 Codex、选择图片、调整效果、查看预览、点击应用。
@@ -27,7 +35,7 @@
 
 请先准备当前版本的 Node.js/npm，以及对应操作系统所需的 Rust/Tauri 开发环境。
 
-开发检查、测试与桌面安装包统一通过 GitHub Actions 完成。Fork 仓库并推送分支后，运行 **Check** 和 **Build desktop previews** 工作流即可，避免在低配置本机执行重型跨平台构建。
+开发检查、测试与便携版打包统一通过 GitHub Actions 完成。Fork 仓库并推送分支后，运行 **Check** 和 **Build portable previews** 工作流即可，避免在低配置本机执行重型跨平台构建。
 
 ## 前后端命令约定
 

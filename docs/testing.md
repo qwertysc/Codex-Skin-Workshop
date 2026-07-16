@@ -11,15 +11,17 @@ GitHub Actions is the source of truth for checks and distributable previews. Con
 
 The lightweight `vitest.config.ts` discovers colocated `*.test.*` and `*.spec.*` frontend tests and permits an initially empty suite.
 
-## Preview build workflow
+## Portable preview build workflow
 
-`.github/workflows/build.yml` runs manually or when a `v*` tag is pushed. It creates separate artifacts for:
+`.github/workflows/build.yml` runs manually or when a `v*` tag is pushed. It creates separate portable ZIP artifacts for:
 
 - macOS x64;
 - macOS arm64;
-- Windows x64 NSIS.
+- Windows x64.
 
-These artifacts are **unsigned previews**. macOS Gatekeeper or Windows SmartScreen may warn or refuse normal launch. Do not present them as signed releases, and verify their provenance from the corresponding GitHub Actions run.
+Each archive includes the application, a platform-specific launcher, usage instructions, and the TokenToken sponsor notice. No NSIS or other installer is produced.
+
+These artifacts are **unsigned previews**. macOS Gatekeeper or Windows SmartScreen may warn or refuse normal launch. Users should extract the complete ZIP and enter through the included launcher. Do not present them as signed releases, and verify their provenance from the corresponding GitHub Actions run.
 
 ## Adding tests
 

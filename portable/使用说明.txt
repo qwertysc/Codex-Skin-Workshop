@@ -1,0 +1,7 @@
+Codex Skin Workshop 便携版
+
+1. 请先完整解压 ZIP，不要直接在压缩包中运行。
+2. macOS：每次双击“启动 Codex Skin Workshop.command”。首次运行如被拦截，请右键启动器并选择“打开”。
+3. Windows：每次双击“启动 Codex Skin Workshop.cmd”。如出现 SmartScreen，请确认文件来自本项目官方 GitHub Release。
+4. 启动器不会安装软件、申请管理员权限或关闭系统安全功能。
+5. 应用、启动器和赞助商说明应始终放在同一文件夹中。

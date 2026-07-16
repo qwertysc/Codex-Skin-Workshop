@@ -1,4 +1,4 @@
-name: Build desktop previews
+name: Build portable previews
 
 on:
   workflow_dispatch:
@@ -22,24 +22,30 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: macOS x64
+          - name: macOS x64 portable
             os: macos-15-intel
             rust_target: x86_64-apple-darwin
-            bundle_args: --target x86_64-apple-darwin
-            artifact_name: codex-skin-workshop-macos-x64-unsigned
-            artifact_path: src-tauri/target/x86_64-apple-darwin/release/bundle/**/*
-          - name: macOS arm64
+            bundle_args: --target x86_64-apple-darwin --bundles app
+            app_path: src-tauri/target/x86_64-apple-darwin/release/bundle/macos/Codex Skin Workshop.app
+            package_dir: Codex-Skin-Workshop-macOS-x64-Portable
+            archive_name: Codex-Skin-Workshop-macOS-x64-Portable.zip
+            artifact_name: codex-skin-workshop-macos-x64-portable
+          - name: macOS arm64 portable
             os: macos-15
             rust_target: aarch64-apple-darwin
-            bundle_args: --target aarch64-apple-darwin
-            artifact_name: codex-skin-workshop-macos-arm64-unsigned
-            artifact_path: src-tauri/target/aarch64-apple-darwin/release/bundle/**/*
-          - name: Windows NSIS x64
+            bundle_args: --target aarch64-apple-darwin --bundles app
+            app_path: src-tauri/target/aarch64-apple-darwin/release/bundle/macos/Codex Skin Workshop.app
+            package_dir: Codex-Skin-Workshop-macOS-arm64-Portable
+            archive_name: Codex-Skin-Workshop-macOS-arm64-Portable.zip
+            artifact_name: codex-skin-workshop-macos-arm64-portable
+          - name: Windows x64 portable
             os: windows-latest
             rust_target: x86_64-pc-windows-msvc
-            bundle_args: --target x86_64-pc-windows-msvc --bundles nsis
-            artifact_name: codex-skin-workshop-windows-x64-nsis-unsigned
-            artifact_path: src-tauri/target/x86_64-pc-windows-msvc/release/bundle/nsis/**/*
+            bundle_args: --target x86_64-pc-windows-msvc --no-bundle
+            exe_path: src-tauri/target/x86_64-pc-windows-msvc/release/codex-skin-workshop.exe
+            package_dir: Codex-Skin-Workshop-Windows-x64-Portable
+            archive_name: Codex-Skin-Workshop-Windows-x64-Portable.zip
+            artifact_name: codex-skin-workshop-windows-x64-portable
 
     steps:
       - uses: actions/checkout@v4
@@ -56,20 +62,55 @@ jobs:
           workspaces: src-tauri
           key: ${{ matrix.rust_target }}
       - run: npm ci
-      - name: Build Tauri bundle
+      - name: Build portable application
         shell: bash
         run: npm run tauri -- build ${{ matrix.bundle_args }}
-      - name: Upload unsigned preview
+
+      - name: Package macOS portable ZIP
+        if: runner.os == 'macOS'
+        shell: bash
+        env:
+          APP_PATH: ${{ matrix.app_path }}
+          PACKAGE_DIR: ${{ matrix.package_dir }}
+          ARCHIVE_NAME: ${{ matrix.archive_name }}
+        run: |
+          mkdir -p "portable-dist/$PACKAGE_DIR"
+          cp -R "$APP_PATH" "portable-dist/$PACKAGE_DIR/"
+          cp "portable/macos/启动 Codex Skin Workshop.command" "portable-dist/$PACKAGE_DIR/"
+          cp "portable/使用说明.txt" "portable-dist/$PACKAGE_DIR/"
+          cp "portable/赞助商.txt" "portable-dist/$PACKAGE_DIR/"
+          chmod +x "portable-dist/$PACKAGE_DIR/启动 Codex Skin Workshop.command"
+          ditto -c -k --sequesterRsrc --keepParent "portable-dist/$PACKAGE_DIR" "portable-dist/$ARCHIVE_NAME"
+
+      - name: Package Windows portable ZIP
+        if: runner.os == 'Windows'
+        shell: pwsh
+        env:
+          EXE_PATH: ${{ matrix.exe_path }}
+          PACKAGE_DIR: ${{ matrix.package_dir }}
+          ARCHIVE_NAME: ${{ matrix.archive_name }}
+        run: |
+          $destination = Join-Path "portable-dist" $env:PACKAGE_DIR
+          New-Item -ItemType Directory -Force -Path $destination | Out-Null
+          Copy-Item -LiteralPath $env:EXE_PATH -Destination (Join-Path $destination "Codex Skin Workshop.exe")
+          Copy-Item -LiteralPath "portable/windows/启动 Codex Skin Workshop.cmd" -Destination $destination
+          Copy-Item -LiteralPath "portable/使用说明.txt" -Destination $destination
+          Copy-Item -LiteralPath "portable/赞助商.txt" -Destination $destination
+          Compress-Archive -LiteralPath $destination -DestinationPath (Join-Path "portable-dist" $env:ARCHIVE_NAME) -Force
+
+      - name: Upload portable preview
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact_name }}
-          path: ${{ matrix.artifact_path }}
+          path: portable-dist/${{ matrix.archive_name }}
           if-no-files-found: error
           retention-days: 14
-      - name: Add unsigned-build notice
+
+      - name: Add portable-build notice
         shell: bash
         run: |
           {
-            echo "### ⚠️ Unsigned preview: ${{ matrix.name }}"
-            echo "This artifact is produced for testing only. It is not code-signed or notarized, so the operating system may show a security warning."
+            echo "### Portable preview: ${{ matrix.name }}"
+            echo "Extract the complete ZIP and always enter through the included launcher. No installer or administrator access is required."
+            echo "This preview is not code-signed or notarized, so the operating system may show a security warning."
           } >> "$GITHUB_STEP_SUMMARY"
