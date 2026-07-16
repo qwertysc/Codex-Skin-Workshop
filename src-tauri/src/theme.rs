@@ -133,7 +133,7 @@ mod tests {
     fn round_trip_store() {
         let dir = tempfile::tempdir().unwrap();
         let store = ThemeStore::new(dir.path().to_owned()).unwrap();
-        let t = Theme { id: "night".into(), name: "Night".into(), colors: BTreeMap::from([("accent".into(), "#abcdef".into())]), background_image: None, opacity: Some(.8), blur_px: Some(4), brightness_pct: Some(80), saturation_pct: Some(120) };
+        let t = Theme { id: "night".into(), name: "Night".into(), colors: BTreeMap::from([("accent".into(), "#abcdef".into())]), background_image: None, opacity: Some(0.8), blur_px: Some(4), brightness_pct: Some(80), saturation_pct: Some(120) };
         store.save(&t).unwrap();
         assert_eq!(store.list().unwrap(), vec![t]);
         store.delete("night").unwrap();
