@@ -1,0 +1,75 @@
+name: Build desktop previews
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: macOS x64
+            os: macos-15-intel
+            rust_target: x86_64-apple-darwin
+            bundle_args: --target x86_64-apple-darwin
+            artifact_name: codex-skin-workshop-macos-x64-unsigned
+            artifact_path: src-tauri/target/x86_64-apple-darwin/release/bundle/**/*
+          - name: macOS arm64
+            os: macos-15
+            rust_target: aarch64-apple-darwin
+            bundle_args: --target aarch64-apple-darwin
+            artifact_name: codex-skin-workshop-macos-arm64-unsigned
+            artifact_path: src-tauri/target/aarch64-apple-darwin/release/bundle/**/*
+          - name: Windows NSIS x64
+            os: windows-latest
+            rust_target: x86_64-pc-windows-msvc
+            bundle_args: --target x86_64-pc-windows-msvc --bundles nsis
+            artifact_name: codex-skin-workshop-windows-x64-nsis-unsigned
+            artifact_path: src-tauri/target/x86_64-pc-windows-msvc/release/bundle/nsis/**/*
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install Rust target
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.rust_target }}
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+          key: ${{ matrix.rust_target }}
+      - run: npm ci
+      - name: Build Tauri bundle
+        shell: bash
+        run: npm run tauri -- build ${{ matrix.bundle_args }}
+      - name: Upload unsigned preview
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: ${{ matrix.artifact_path }}
+          if-no-files-found: error
+          retention-days: 14
+      - name: Add unsigned-build notice
+        shell: bash
+        run: |
+          {
+            echo "### ⚠️ Unsigned preview: ${{ matrix.name }}"
+            echo "This artifact is produced for testing only. It is not code-signed or notarized, so the operating system may show a security warning."
+          } >> "$GITHUB_STEP_SUMMARY"
