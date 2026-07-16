@@ -3,5 +3,5 @@
   "identifier": "default",
   "description": "Default permissions for Codex Skin Workshop",
   "windows": ["main"],
-  "permissions": ["core:default", "dialog:allow-open"]
+  "permissions": ["core:default", "dialog:allow-open", "dialog:allow-save"]
 }

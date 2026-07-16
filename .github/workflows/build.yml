@@ -26,7 +26,7 @@ jobs:
             os: macos-15-intel
             rust_target: x86_64-apple-darwin
             bundle_args: --target x86_64-apple-darwin --bundles app
-            app_path: src-tauri/target/x86_64-apple-darwin/release/bundle/macos/Codex Skin Workshop.app
+            app_path: src-tauri/target/x86_64-apple-darwin/release/bundle/macos/Codex 皮肤工坊.app
             package_dir: Codex-Skin-Workshop-macOS-x64-Portable
             archive_name: Codex-Skin-Workshop-macOS-x64-Portable.zip
             artifact_name: codex-skin-workshop-macos-x64-portable
@@ -34,7 +34,7 @@ jobs:
             os: macos-15
             rust_target: aarch64-apple-darwin
             bundle_args: --target aarch64-apple-darwin --bundles app
-            app_path: src-tauri/target/aarch64-apple-darwin/release/bundle/macos/Codex Skin Workshop.app
+            app_path: src-tauri/target/aarch64-apple-darwin/release/bundle/macos/Codex 皮肤工坊.app
             package_dir: Codex-Skin-Workshop-macOS-arm64-Portable
             archive_name: Codex-Skin-Workshop-macOS-arm64-Portable.zip
             artifact_name: codex-skin-workshop-macos-arm64-portable
@@ -92,7 +92,7 @@ jobs:
         run: |
           $destination = Join-Path "portable-dist" $env:PACKAGE_DIR
           New-Item -ItemType Directory -Force -Path $destination | Out-Null
-          Copy-Item -LiteralPath $env:EXE_PATH -Destination (Join-Path $destination "Codex Skin Workshop.exe")
+          Copy-Item -LiteralPath $env:EXE_PATH -Destination (Join-Path $destination "Codex 皮肤工坊.exe")
           Copy-Item -LiteralPath "portable/windows/启动 Codex Skin Workshop.cmd" -Destination $destination
           Copy-Item -LiteralPath "portable/使用说明.txt" -Destination $destination
           Copy-Item -LiteralPath "portable/赞助商.txt" -Destination $destination

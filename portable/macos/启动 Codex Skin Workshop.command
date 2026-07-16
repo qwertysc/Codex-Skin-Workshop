@@ -2,16 +2,16 @@
 set -u
 
 HERE="$(cd "$(dirname "$0")" && pwd)"
-APP="$HERE/Codex Skin Workshop.app"
+APP="$HERE/Codex 皮肤工坊.app"
 
 show_error() {
-  /usr/bin/osascript -e "display alert \"Codex Skin Workshop\" message \"$1\" as critical" >/dev/null 2>&1 || true
+  /usr/bin/osascript -e "display alert \"Codex 皮肤工坊\" message \"$1\" as critical" >/dev/null 2>&1 || true
   printf '\n%s\n' "$1"
   read -r -p "按回车键关闭……" _
   exit 1
 }
 
-[ -d "$APP" ] || show_error "找不到 Codex Skin Workshop.app。请完整解压 ZIP，并保留启动器和应用在同一文件夹。"
+[ -d "$APP" ] || show_error "找不到 Codex 皮肤工坊.app。请完整解压 ZIP，并保留启动器和应用在同一文件夹。"
 
 # Only remove the download quarantine marker from this portable app.
 /usr/bin/xattr -dr com.apple.quarantine "$APP" 2>/dev/null || true

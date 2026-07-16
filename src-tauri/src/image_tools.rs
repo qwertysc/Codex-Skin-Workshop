@@ -22,20 +22,20 @@ pub struct ImportedImage {
 pub fn import_image(store: &ThemeStore, source: &Path) -> Result<ImportedImage, AppError> {
     let meta = fs::metadata(source)?;
     if !meta.is_file() || meta.len() > MAX_IMAGE_BYTES {
-        return Err(AppError::Validation("image must be a file no larger than 25 MiB".into()));
+        return Err(AppError::Validation("图片必须是普通文件，且不能超过 25 MiB".into()));
     }
     let reader = ImageReader::open(source)?.with_guessed_format()?;
-    let format = reader.format().ok_or_else(|| AppError::Validation("unknown image format".into()))?;
+    let format = reader.format().ok_or_else(|| AppError::Validation("无法识别图片格式".into()))?;
     let extension = match format {
         image::ImageFormat::Png => "png",
         image::ImageFormat::Jpeg => "jpg",
         image::ImageFormat::WebP => "webp",
         image::ImageFormat::Gif => "gif",
-        _ => return Err(AppError::Validation("only PNG, JPEG, WebP and GIF are supported".into())),
+        _ => return Err(AppError::Validation("仅支持 PNG、JPEG、WebP 和 GIF 图片".into())),
     };
     let (width, height) = reader.into_dimensions()?;
     if u64::from(width) * u64::from(height) > MAX_PIXELS {
-        return Err(AppError::Validation("image dimensions are too large".into()));
+        return Err(AppError::Validation("图片尺寸过大".into()));
     }
     let image = ImageReader::open(source)?.with_guessed_format()?.decode()?;
     // Re-encode the first decoded frame. This strips metadata and makes imported bytes trusted image data.
@@ -68,7 +68,7 @@ fn extract_palette(image: &image::DynamicImage, count: usize) -> Vec<String> {
 
 pub fn resolve_imported_image(root: &Path, relative: &str) -> Result<PathBuf, AppError> {
     if !relative.starts_with("images/") || relative.contains("..") || relative.contains('\\') || relative.contains('\0') {
-        return Err(AppError::Validation("invalid imported image path".into()));
+        return Err(AppError::Validation("导入图片路径无效".into()));
     }
     Ok(root.join(relative))
 }

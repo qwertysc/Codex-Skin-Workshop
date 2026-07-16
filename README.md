@@ -20,6 +20,8 @@ Official previews are distributed only as portable ZIP archives for macOS arm64,
 - **Safe live preview** — editing does not touch Codex until **Apply to Codex** is clicked.
 - **Visual controls** — accent/surface/text colors, brightness, blur, dark overlay, and saturation.
 - **Theme library** — built-in starting points plus a frontend model for locally saved themes.
+- **Portable theme documents** — built-in templates live in `src/themes/*.json`; user themes can be imported, exported, and shared.
+- **Expanded controls** — image position/scale, panel transparency/blur, corners, content width, ten color tokens, theme copy, and decorative elements.
 - **Restore entry point** — a clear action for restoring the original appearance.
 - **Lightweight UI** — React, TypeScript, Vite, and handcrafted CSS; no heavyweight component framework.
 - **Tauri 2 bridge** — frontend APIs call typed Tauri commands for detection, storage, application, and restore.
@@ -51,7 +53,11 @@ The frontend currently invokes these commands:
 | `apply_theme` | Apply the selected value-only theme through the managed preview target |
 | `restore_codex` | Remove workshop styling and close the managed preview session |
 
-The current backend uses a managed Codex preview process and a loopback-only DevTools connection rather than patching application files. Platform compatibility and recovery behavior still need broad testing before release.
+The backend uses a managed Codex process and a loopback-only DevTools connection rather than patching application files. It waits for an injectable renderer target and clears stale state when Codex has exited before retrying an apply operation.
+
+## Theme sharing
+
+Theme files are strictly validated, value-only JSON documents. They cannot contain CSS, JavaScript, HTML, shell, or PowerShell. Export removes the local background-image path; recipients can select their own image after import.
 
 ## Project layout
 
