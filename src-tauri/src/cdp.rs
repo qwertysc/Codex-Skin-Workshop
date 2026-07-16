@@ -90,7 +90,7 @@ mod tests {
     use std::collections::BTreeMap;
     #[test] fn payload_contains_only_encoded_user_values() {
         let dir=tempfile::tempdir().unwrap();
-        let t=Theme{id:"x".into(),name:"X".into(),colors:BTreeMap::from([("accent".into(),"#abcdef".into())]),background_image:None,opacity:Some(.5),blur_px:Some(2),brightness_pct:Some(80),saturation_pct:Some(120)};
+        let t=Theme{id:"x".into(),name:"X".into(),colors:BTreeMap::from([("accent".into(),"#abcdef".into())]),background_image:None,opacity:Some(0.5),blur_px:Some(2),brightness_pct:Some(80),saturation_pct:Some(120)};
         let payload=render_payload(&t,dir.path()).unwrap();
         assert!(payload.contains(STYLE_NODE_ID)); assert!(!payload.contains("#abcdef")); assert!(!payload.contains("--csw-accent"));
     }

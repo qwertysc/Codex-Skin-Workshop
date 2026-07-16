@@ -45,7 +45,7 @@ function toBackendTheme(theme: CodexTheme): BackendTheme {
   return {
     id: theme.id,
     name: theme.name,
-    colors: theme.colors,
+    colors: { ...theme.colors },
     background_image: theme.image.kind === "local" ? theme.image.path : null,
     opacity: Math.max(0, Math.min(1, 1 - theme.effects.overlay / 100)),
     blur_px: theme.effects.blur,
