@@ -43,4 +43,14 @@ png = b'\x89PNG\r\n\x1a\n' + chunk(b'IHDR', struct.pack('>IIBBBBB', SIZE, SIZE, 
 out = Path(__file__).resolve().parents[1] / 'src-tauri' / 'icons' / 'icon.png'
 out.parent.mkdir(parents=True, exist_ok=True)
 out.write_bytes(png)
+
+# Windows Vista and newer support PNG-compressed images embedded directly in ICO.
+ico = (
+    struct.pack('<HHH', 0, 1, 1)
+    + struct.pack('<BBBBHHII', 0, 0, 0, 0, 1, 32, len(png), 22)
+    + png
+)
+ico_out = out.with_name('icon.ico')
+ico_out.write_bytes(ico)
 print(out)
+print(ico_out)
