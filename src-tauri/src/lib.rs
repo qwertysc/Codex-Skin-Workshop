@@ -45,7 +45,7 @@ fn import_image(store: State<'_, StoreState>, source_path: PathBuf) -> Result<Im
 fn detect_codex() -> Vec<CodexInstallation> { codex::detect_codex() }
 
 #[tauri::command]
-fn launch_codex(state: State<'_, CodexState>, store: State<'_, StoreState>, executable: PathBuf) -> Result<LaunchResult, AppError> {
+fn launch_codex(state: State<'_, CodexState>, executable: PathBuf) -> Result<LaunchResult, AppError> {
     let mut guard = managed(&state)?;
     if let Some(current) = guard.as_mut() {
         if current.child.try_wait()?.is_none() { return Err(AppError::Validation("a managed Codex instance is already running".into())); }
