@@ -99,7 +99,7 @@ jobs:
           Compress-Archive -LiteralPath $destination -DestinationPath (Join-Path "portable-dist" $env:ARCHIVE_NAME) -Force
 
       - name: Upload portable preview
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ matrix.artifact_name }}
           path: portable-dist/${{ matrix.archive_name }}

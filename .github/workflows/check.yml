@@ -62,7 +62,7 @@ jobs:
         run: cargo check --manifest-path src-tauri/Cargo.toml --all-targets --all-features
       - name: Upload generated Rust lockfile
         if: runner.os == 'Linux'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: generated-cargo-lock
           path: src-tauri/Cargo.lock
